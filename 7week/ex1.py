@@ -17,5 +17,5 @@ plt.plot(range(1,len(df2)+1),df2['avg_temp'],label='평균기온',c='y')
 plt.plot(range(1,len(df2)+1),df2['min_temp'],label='최저기온',c='b')
 plt.xlabel('일')
 plt.ylabel('기온')
-plt.legend()
+plt.legend()#범례표시를 시키겠다는 것.
 plt.show()
