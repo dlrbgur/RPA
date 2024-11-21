@@ -25,29 +25,32 @@ from fastapi import File, UploadFile
 import shutil
 from pathlib import Path
 
-@app.post("/uploadfile/")
-async def create_upload_file(file: UploadFile = File(...)):
+## formData를 통해서 메세지를 저장해서 POST(header가 있고 내용은 body에 담긴다) 명령어를 통해서 여기로 보내면
+
+@app.post("/uploadfile/") ## 여기서 받아서 
+async def create_upload_file(file: UploadFile = File(...)): ## 여기로 들어와서 
     save_path = Path("static/uploads") / file.filename
     save_path.parent.mkdir(parents=True, exist_ok=True)
     
     with save_path.open("wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+        shutil.copyfileobj(file.file, buffer)  ## 받아온 파일을 저장
     
     return {"filename": file.filename, "location": str(save_path)}
-## ----------------------------------------------------------------9주차------------------------------------------------------------------------
+## ----------------------------------------------------------------10주차------------------------------------------------------------------------
+
 from fastapi import File, UploadFile
 import shutil
 from pathlib import Path
 from fastapi.responses import FileResponse
 
-@app.get("/files/{filename}")
+@app.get("/files/{filename}")   ## const url에서 보낸 값을 여기서 받음
 async def get_file(filename: str):
-    file_path = Path("static/upload") / filename
+    file_path = Path("static/uploads") / filename
     if file_path.is_file():
-        return FileResponse(path=file_path, filename=filename) 
+        return FileResponse(path=file_path, filename=filename)
     else:
         raise HTTPException(status_code=404, detail="File not found")
-
+## ----------------------------------------------------------------10주차------------------------------------------------------------------------
 from fastapi.staticfiles import StaticFiles
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
